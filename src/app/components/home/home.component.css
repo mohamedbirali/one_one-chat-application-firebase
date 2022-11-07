@@ -1,0 +1,36 @@
+.row {
+  background: #27262e;
+  display: flex;
+  height: calc(100vh - 90px);
+  border-radius: 26px;
+}
+
+.list-users {
+  border-right: .4px solid white;
+  overflow-y: scroll;
+}
+
+#contact-list {
+  overflow: auto;
+  overflow-x: none;
+}
+
+.otherUser {
+  cursor: pointer;
+}
+
+.message-section {
+  height: 400px;
+  padding: 8px;
+  background-color: #2d2c38;
+  border-radius: 10px;
+  overflow: auto;
+}
+
+.current-user-msg {
+  background-color: rgb(53, 37, 56);
+}
+
+.other-user-msg {
+  background-color: blue;
+}

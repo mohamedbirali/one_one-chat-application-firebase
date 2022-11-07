@@ -1,0 +1,57 @@
+<div class="container">
+  <div class="row d-xl-flex d-xxl-flex justify-content-center">
+      <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+          <!-- Start: Login Form -->
+          <div class="card" style="background: var(--bs-card-cap-bg);border-radius: 16px;">
+              <div class="card-body text-center d-flex flex-column align-items-center" style="background: rgb(39,38,46);position: relative;border-color: var(--bs-navbar-hover-color);border-radius: 16px;">
+                  <div class="bs-icon-xl bs-icon-circle bs-icon-primary shadow bs-icon my-4"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-person">
+                          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>
+                      </svg>
+                    </div>
+
+              <form #isFormValid="ngForm" [formGroup]="registerForm">
+                <!-- username -->
+                <input placeholder="username" formControlName="username" class="form-control mt-3"  name="username"  type="text">
+                <!-- username validation -->
+                <div *ngIf="username?.touched && username?.invalid">
+                    <small class="text-danger" *ngIf="username?.errors?.['required']">username is required <br></small>
+                    <small class="text-danger" *ngIf="username?.errors?.['minlength']">username must be at least 3 characters</small>
+                </div>
+
+                <!-- email -->
+                <!-- [(ngModel)]="register.email" deprecated ! -->
+                <input placeholder="email" formControlName="email" class="form-control mt-3" name="email"  type="email">
+
+                <div *ngIf="email?.touched && email?.invalid">
+                    <small class="text-danger" *ngIf="email?.errors?.['required']">email is required</small>
+                    <small class="text-danger" *ngIf="email?.errors?.['email']">email is invalid</small>
+                </div>
+
+                <!-- password -->
+                <!-- [(ngModel)]="register.password" deprecated ! -->
+                <input placeholder="password" formControlName="password" class="form-control mt-3" name="password" type="password">
+
+                <div *ngIf="password?.touched && password?.invalid">
+                    <small class="text-danger" *ngIf="password?.errors?.['required']">password is required</small>
+                    <small class="text-danger" *ngIf="password?.errors?.['minlength']">password must be at least 8 characters</small>
+                </div>
+
+                <!-- confirm password -->
+                <!-- [(ngModel)]="register.password" deprecated ! -->
+                <input placeholder="confirm password" formControlName="confirmPassword" class="form-control mt-3" name="confirmPassword" type="password">
+
+                <div *ngIf="confirmPassword?.touched && confirmPassword?.invalid">
+                    <small class="text-danger" *ngIf="confirmPassword?.errors?.['required']"> confirm password is required</small>
+                </div>
+
+                <!-- if passwords match -->
+                <small class="text-danger" *ngIf="registerForm.errors?.['passwordDsntMatch']">passwords don't match<br></small>
+
+                <!-- submit -->
+                <button class="btn btn-primary mt-3" [disabled]="!isFormValid.valid" type="submit" (click)="onRegister()">register</button>
+                <p class="text-muted mb-0">Already have an account?&nbsp;<a routerLink="../login">Log in</a></p>
+            </form>
+          </div>
+        </div>
+      </div>
+</div>

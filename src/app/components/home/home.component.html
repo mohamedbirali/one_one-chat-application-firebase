@@ -1,0 +1,91 @@
+<!-- its too match for this component => devide this this to small components and use NgRx for all components ! -->
+
+<section id="chat">
+  <div class="container">
+      <div class="row">
+          <div id="contact-list" class="m-2 col-md-4 contact-list">
+            <!-- search input READONLY -->
+              <form>
+                <div class="input-group">
+                    <input (click)="btn.click()" class="shadow-none form-control" type="text" placeholder="search by username ..." style="border-width: 0px; cursor: pointer;" readonly />
+                    <button #btn class="btn btn-primary shadow-none" type="button" style="padding-right: 8px;padding-left: 8px;" data-bs-target="#searchModal" data-bs-toggle="modal">
+                    <svg class="bi bi-search fs-4" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z">
+                    </path>
+                    </svg>search</button>
+                  </div>
+                  <!-- modal -->
+              <div id="searchModal" class="modal fade" role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title"><strong><span style="color: rgb(39, 38, 46);">Search users</span></strong></h4><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-group"><span class="bg-white input-group-text border" style="padding-right: 8px; border-right: 0px;"><svg class="bi bi-search fs-4" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                                    </svg></span><input [formControl]="search" name="search" class="shadow-none form-control" type="text" placeholder="search by username ..." data-bs-target="#modal-1" style="border-left: 0px; outline: 0px;" /></div>
+
+                                    <div *ngFor="let user of filterUsers$ | async"  class="otherUser m-1 border rounded border-0 d-xl-flex align-items-xl-center" style="background: #2d2c38;" (click)="onCreateChat(user)" data-bs-dismiss="modal">
+                                      <div><img class="border rounded-circle border-0" width="68" height="68" [src]="user.photoURL" /></div>
+                                      <div class="d-xl-flex flex-column justify-content-xl-center align-items-xl-start m-3">
+                                              <span style="font-weight: bold;"> {{user.displayName}} </span>
+                                      </div>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+              </form>
+              <hr>
+
+              <!-- list of contacts = users/currentUser -->
+              <div>
+                <div class="list-group">
+                  <a style="cursor: pointer; border-radius: 12px; background: #2d2c38;" *ngFor="let chat of myChats$ | async" (click)="onSelectedChat(chat.id)" class="mb-1 list-group-item list-group-item-action">
+                      <img class="border rounded-circle border-0" width="60" height="60" [src]="chat.chatPic ?? 'src/assets/images/defaultImage.jpg'">
+                        <span style="font-weight: bold;" class="text-white"> {{chat.chatName}} </span>
+                        <small class="text-white text-nowrap text text-truncate"> {{chat.lastMessageDate | timestampToString}} </small> <br>
+                        <p class="text-white text-truncate"> {{chat.lastMessage}} </p>
+                  </a>
+                </div>
+              </div>
+          </div>
+
+
+          <!-- conversation here -->
+          <div class="col-md-7">
+              <div *ngIf="selectedChat$ | async as selectedChat;else notSelectedYet">
+                <img class="border rounded-circle border-0" width="40" height="40" [src]="selectedChat.chatPic ?? 'src/assets/images/defaultImage.jpg'">
+                <span> {{selectedChat.chatName}} </span>
+              </div>
+              <ng-template #notSelectedYet>
+                <div>
+                  welcome, again
+                </div>
+              </ng-template>
+
+              <!-- messages + send input -->
+              <ng-container *ngIf="user$ | async as user">
+                <div class="message-section mt-2 mb-2 flex-fill">
+                  <div *ngFor="let message of messages$ |async">
+                    <div class="mb-2" [ngClass]="user.uid === message.senderId ? 'current-user-msg' : 'other-user-msg'">
+                      <div> {{message.text}} </div>
+                      <!-- {{message.sendDate}} -->
+                      <span>{{message.sentDate | timestampToString }}</span>
+                    </div>
+                  </div>
+                  <div #endOfConversation></div>
+                </div>
+                <!-- send message -->
+                <div class="input-group mb-1">
+                  <input [formControl]="sendInputControl" type="text" class="form-control shadow-none" placeholder="message ..." aria-label="Recipient's username" aria-describedby="button-addon2" (keyup.enter)="sendMessage()">
+                  <button class="btn btn-outline-secondary" type="button" (click)="sendMessage()">send</button>
+                </div>
+              </ng-container>
+
+          </div>
+      </div>
+  </div>
+</section>
